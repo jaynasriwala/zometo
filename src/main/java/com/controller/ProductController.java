@@ -10,9 +10,11 @@ import java.util.Optional;
 
 import org.hibernate.grammars.hql.HqlParser.IsEmptyPredicateContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -66,4 +68,30 @@ public class ProductController
 //			return productEntity;
 //		}
 //	}
+	
+	@DeleteMapping("/products/{productId}")
+	public String DeleteById(@PathVariable("productId") Integer productId)
+	{
+		Optional<ProductEntity> op = productrepository.findById(productId);
+		
+		if (op.isEmpty())
+		{
+			return "not found";
+		}
+		else
+		{
+		productrepository.deleteById(productId);
+		return "success";
+		}
+	}
+	
+	@PutMapping("/products")
+	public String UpdateProduct(@RequestBody ProductEntity productentity)
+	{
+		productrepository.save(productentity);
+		
+		return "success";
+	}
+	
+	
 }
